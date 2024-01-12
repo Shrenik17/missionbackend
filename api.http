@@ -1,0 +1,66 @@
+# GET request to check the status of the app running
+GET http://localhost:5000
+
+
+
+
+# ---------- LOGIN LOGOUT ROTES DEFINED BELOW ----------
+
+# This is the main route for the login logout routes
+###
+GET http://localhost:5000/auth
+
+
+# This route is used to signup a new user into the database
+###
+POST http://localhost:5000/auth/signup
+Content-Type: application/json
+
+{
+    "user_id" : 1,
+    "user_name": "karmanshu",
+    "user_email": "karmanshu.swami@revdau.com",
+    "user_password": "QWERTY@123"
+}
+
+###
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+    "user_email": "karmanshu.swami@revdau.com",
+    "password": "QWERTY@123"
+}
+
+
+# ---------- CONTACT FORM ROTES DEFINED BELOW ----------
+###
+POST http://localhost:5000/contact/addForm
+Content-Type: application/json
+
+{
+    "name" : "fhsdjhfkjdshfk",
+    "email" : "fhsdjhfkjdshfk",
+    "phoneNumber" : "fhsdjhfkjdshfk",
+    "message" : "fhsdjhfkjdshfk"
+}
+
+
+
+
+
+# ---------- MEMBERS ROTES DEFINED BELOW ----------
+
+# This route is used to delete the member's details from the table
+###
+GET http://localhost:5000/members/deleteMember/2
+
+// This route is used to get the members details from the database on  the basis of the member id
+###
+GET http://localhost:5000/members/getMember/1
+
+###
+GET http://localhost:5000/events/getYears/events
+
+###
+GET http://localhost:5000/events/getEventsByYear/2025/events
