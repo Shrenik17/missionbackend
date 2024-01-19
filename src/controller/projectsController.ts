@@ -1,14 +1,24 @@
-
 import { NextFunction, Request, Response } from "express";
 import { db } from "../database/dbConnection";
 import fs from "fs";
 
 // This is the route to add the new event or news and the path to its image in the database
-export const addProjects = (req: Request, res: Response, next: NextFunction) => {
+export const addProjects = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   //   console.log("add project", req.body, req.file);
   try {
     const { title, type, projectYear, shortDesc, projectLink } = req.body;
-    if (!req.file || !title || !type || !projectYear || !shortDesc || !projectLink) {
+    if (
+      !req.file ||
+      !title ||
+      !type ||
+      !projectYear ||
+      !shortDesc ||
+      !projectLink
+    ) {
       if (req.file) {
         fs.unlinkSync(req.file.path);
       }
@@ -21,7 +31,14 @@ export const addProjects = (req: Request, res: Response, next: NextFunction) => 
       const filePath = `uploads/projects/${fileName}`;
       const query =
         "INSERT INTO projects (title, projectType, projectYear, shortDesc, imagePath, projectLink) VALUES (?)";
-      const values = [title, type, projectYear, shortDesc, filePath, projectLink];
+      const values = [
+        title,
+        type,
+        projectYear,
+        shortDesc,
+        filePath,
+        projectLink,
+      ];
       db.getConnection(function (err, connection) {
         if (err) {
           return res.status(400).json({
@@ -81,8 +98,8 @@ export const getAllProjects = (
             });
           } else {
             const projectData = data.map((project: any) => {
-              const photoBuffer = fs.readFileSync(project.imagePath);
-              const photoBase64 = photoBuffer.toString("base64");
+              const photoBuffer = fs.readFileSync(project.imagePath); //stored binary data
+              const photoBase64 = photoBuffer.toString("base64"); // converts the binary data to a base64-encoded string.
 
               return {
                 id: project.id,
@@ -166,7 +183,7 @@ export const getProjectById = (
               type: false,
               error: err,
               message: "Cannot get the event's details!",
-            }); 
+            });
           } else {
             const projectData = data.map((project: any) => {
               const photoBuffer = fs.readFileSync(project.imagePath);
@@ -203,11 +220,11 @@ export const updateProjects = (
   console.log("update data", req.body);
   try {
     const id = req.params.id;
-    const { title, type,projectYear, shortDesc, projectLink } = req.body;
+    const { title, type, projectYear, shortDesc, projectLink } = req.body;
     if (!req.file) {
       const query =
         "UPDATE projects SET title=?, projectType=?, projectYear=?, shortDesc=?,projectLink=? WHERE id=?";
-      const values = [title, type, projectYear , shortDesc, projectLink, id];
+      const values = [title, type, projectYear, shortDesc, projectLink, id];
       db.getConnection(function (err, connection) {
         if (err) {
           return res.status(400).json({
@@ -237,8 +254,16 @@ export const updateProjects = (
       const fileName = req.file.filename;
       const filePath = `uploads/projects/${fileName}`;
       const query =
-        "UPDATE projects SET title=?,projectYear=?, projectType=?, shortDesc=?,  imagePath=?, projectLink=? WHERE id=?";
-      const values = [title, type,projectYear, shortDesc, filePath, projectLink, id];
+        "UPDATE projects SET title=?, projectType=?,projectYear=?, shortDesc=?,imagePath=?, projectLink=? WHERE id=?";
+      const values = [
+        title,
+        type,
+        projectYear,
+        shortDesc,
+        filePath,
+        projectLink,
+        id,
+      ];
       db.getConnection(function (err, connection) {
         if (err) {
           return res.status(400).json({
@@ -283,8 +308,7 @@ export const getYears = (req: Request, res: Response, next: NextFunction) => {
         });
       } else {
         // const id = req.params.id;
-        const query =
-          "SELECT projectYear FROM projects WHERE projectType=?";
+        const query = "SELECT projectYear FROM projects WHERE projectType=?";
         connection.query(query, [type], (err: any, data: any) => {
           if (err) {
             return res.status(400).json({
@@ -320,7 +344,7 @@ export const getProjectsByYears = (
 ) => {
   try {
     const projectYear = req.params.year;
-    const typeOfProject = req.params.type;  //typeOfProject -> is used to avoid confusion bcs projectType is already used above
+    const typeOfProject = req.params.type; //typeOfProject -> is used to avoid confusion bcs projectType is already used above
     const query =
       "SELECT id, title, type, projectYear, shortDesc, imagePath, projectLink FROM projects WHERE type=? AND projectYear=?";
     db.getConnection(function (err, connection) {

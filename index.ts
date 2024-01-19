@@ -14,6 +14,7 @@ import {
   projectsRoutes,
   galleryRoutes,
   reportRoutes,
+  logoRoutes,
   
 } from "./src/routes/indexRoutes";
 import { config } from "./src/config/config";
@@ -56,6 +57,7 @@ app.use("/events", eventsNewsRoutes);
 app.use("/projects", projectsRoutes);
 app.use("/gallery",galleryRoutes);
 app.use("/report",reportRoutes)
+app.use("/logo",logoRoutes)
 
 // Calling the global error handler middleware here
 app.use(ErrorHandler);

@@ -12,6 +12,6 @@ router.delete("/deleteGalleryImages/:id",deleteGalleryImages);
 
 router.get("/getGalleryImageById/:id",getGalleryImageById)
 
-router.get("/updateGalleryImages/:id", galleryUpload.single("galleryImage") ,updateGalleryImages)
+router.put("/updateGalleryImages/:id", galleryUpload.single("galleryImage") ,updateGalleryImages)
 
 export default router;

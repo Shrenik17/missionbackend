@@ -6,3 +6,4 @@ export { default as eventsNewsRoutes } from "./eventsNewsRoutes";
 export { default as projectsRoutes } from "./projectsRoutes";
 export { default as galleryRoutes } from "./galleryRoutes";
 export { default as reportRoutes } from "./reportRoutes";
+export { default as logoRoutes } from "./logoRoutes";

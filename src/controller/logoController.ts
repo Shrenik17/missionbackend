@@ -2,15 +2,15 @@ import { NextFunction, Request, Response } from "express";
 import { db } from "../database/dbConnection";
 import fs from "fs";
 
-export const addGalleryImage = (
+export const addLogoImage = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     console.log("req", req);
-    const { title, shortDesc, galleryImageLink } = req.body;
-    if (!req.file || !title || !shortDesc || !galleryImageLink) {
+    const { title, shortDesc, logoLink } = req.body;
+    if (!req.file || !title || !shortDesc || !logoLink) {
       if (req.file) {
         fs.unlinkSync(req.file.path);
       }
@@ -20,10 +20,10 @@ export const addGalleryImage = (
       });
     } else {
       const fileName = req.file.filename;
-      const filePath = `uploads/gallery/${fileName}`;
+      const filePath = `uploads/logo/${fileName}`;
       const query =
-        "INSERT INTO gallery (title, shortDesc, imagePath, galleryImageLink) VALUES (?)";
-      const values = [title, shortDesc, filePath, galleryImageLink];
+        "INSERT INTO logo (title, shortDesc, imagePath, logoLink) VALUES (?)";
+      const values = [title, shortDesc, filePath, logoLink];
       db.getConnection(function (err, connection) {
         if (err) {
           return res.status(400).json({
@@ -43,7 +43,7 @@ export const addGalleryImage = (
             } else {
               return res.status(201).json({
                 type: true,
-                message: "New image has been added successfully!",
+                message: "New logo has been added successfully!",
               });
             }
           });
@@ -56,14 +56,14 @@ export const addGalleryImage = (
   }
 };
 
-export const getAllGalleryImages = (
+export const getAllLogoImages = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const query =
-      "SELECT id, title, shortDesc, imagePath, galleryImageLink FROM gallery";
+      "SELECT id, title, shortDesc, imagePath, logoLink FROM logo";
     db.getConnection(function (err, connection) {
       if (err) {
         return res.status(400).json({
@@ -78,10 +78,10 @@ export const getAllGalleryImages = (
             return res.json({
               type: false,
               error: err,
-              message: "Cannot get the events details!",
+              message: "Cannot get the logo details!",
             });
           } else {
-            const galleryData = data.map((images: any) => {
+            const logoImageData = data.map((images: any) => {
               const photoBuffer = fs.readFileSync(images.imagePath);
               const photoBase64 = photoBuffer.toString("base64");
 
@@ -91,11 +91,11 @@ export const getAllGalleryImages = (
 
                 shortDesc: images.shortDesc,
 
-                galleryImageLink: images.galleryImageLink,
+                logoLink: images.logoLink,
                 imagePath: `data:image/png;base64,${photoBase64}`,
               };
             });
-            res.status(200).json(galleryData);
+            res.status(200).json(logoImageData);
           }
         });
       }
@@ -106,7 +106,7 @@ export const getAllGalleryImages = (
   }
 };
 
-export const deleteGalleryImages = (
+export const deleteLogoImages = (
   req: any,
   res: Response,
   next: NextFunction
@@ -121,7 +121,7 @@ export const deleteGalleryImages = (
         });
       } else {
         const id = req.params.id;
-        const query = "DELETE FROM gallery WHERE id=?";
+        const query = "DELETE FROM logo WHERE id=?";
         connection.query(query, id, (err: any, data: any) => {
           if (err) {
             return res.status(400).json({
@@ -144,7 +144,7 @@ export const deleteGalleryImages = (
   }
 };
 
-export const getGalleryImageById = (
+export const getLogoImageById = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -152,7 +152,7 @@ export const getGalleryImageById = (
   try {
     const id = req.params.id;
     const query =
-      "SELECT id, title, shortDesc, imagePath, galleryImageLink FROM gallery WHERE id=?";
+      "SELECT id, title, shortDesc, imagePath, logoLink FROM logo WHERE id=?";
     db.getConnection(function (err, connection) {
       if (err) {
         return res.status(400).json({
@@ -167,10 +167,10 @@ export const getGalleryImageById = (
             return res.json({
               type: false,
               error: err,
-              message: "Cannot get the event's details!",
+              message: "Cannot get the logo's details!",
             });
           } else {
-            const galleryData = data.map((images: any) => {
+            const logoImageData = data.map((images: any) => {
               const photoBuffer = fs.readFileSync(images.imagePath);
               const photoBase64 = photoBuffer.toString("base64");
 
@@ -178,11 +178,11 @@ export const getGalleryImageById = (
                 id: images.id,
                 title: images.title,
                 shortDesc: images.shortDesc,
-                galleryImageLink: images.galleryImageLink,
+                logoLink: images.logoLink,
                 imagePath: `data:image/png;base64,${photoBase64}`,
               };
             });
-            res.status(200).json(galleryData);
+            res.status(200).json(logoImageData);
           }
         });
       }
@@ -193,7 +193,7 @@ export const getGalleryImageById = (
   }
 };
 
-export const updateGalleryImages = (
+export const updateLogoImages = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -201,11 +201,11 @@ export const updateGalleryImages = (
   console.log("update data", req.body);
   try {
     const id = req.params.id;
-    const { title, shortDesc, galleryImageLink } = req.body;
+    const { title, shortDesc, logoLink } = req.body;
     if (!req.file) {
       const query =
-        "UPDATE gallery SET title=?, shortDesc=?,galleryImageLink=? WHERE id=?";
-      const values = [title, shortDesc, galleryImageLink, id];
+        "UPDATE logo SET title=?, shortDesc=?,logoLink=? WHERE id=?";
+      const values = [title, shortDesc, logoLink, id];
       db.getConnection(function (err, connection) {
         if (err) {
           return res.status(400).json({
@@ -233,10 +233,10 @@ export const updateGalleryImages = (
       });
     } else {
       const fileName = req.file.filename;
-      const filePath = `uploads/gallery/${fileName}`;
+      const filePath = `uploads/logo/${fileName}`;
       const query =
-        "UPDATE gallery SET title=?, shortDesc=?, imagePath=?, galleryImageLink=? WHERE id=?";
-      const values = [title, shortDesc, filePath, galleryImageLink, id];
+        "UPDATE logo SET title=?, shortDesc=?, imagePath=?, logoLink=? WHERE id=?";
+      const values = [title, shortDesc, filePath, logoLink, id];
       db.getConnection(function (err, connection) {
         if (err) {
           return res.status(400).json({
