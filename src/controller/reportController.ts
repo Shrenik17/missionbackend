@@ -227,7 +227,7 @@ export const addReport = (req: Request, res: Response, next: NextFunction) => {
       const { title, publishedBy ,reportYear , shortDesc } = req.body;
       if (!req.file) {
         const query = "UPDATE reports SET title=?, publishedBy=?,reportYear=?,shortDesc=? WHERE id=?";
-        const values = [title, publishedBy,reportYear,shortDesc];
+        const values = [title, publishedBy,reportYear,shortDesc,id];
         db.getConnection(function (err, connection) {
           if (err) {
             return res.status(400).json({
@@ -257,7 +257,7 @@ export const addReport = (req: Request, res: Response, next: NextFunction) => {
         const fileName = req.file.filename;
         const filePath = `uploads/reports/${fileName}`;
         const query = "UPDATE reports SET title=?, publishedBy=?, reportYear=?, shortDesc=?, pdfPath=?  WHERE id=?";
-        const values = [title, publishedBy,reportYear,shortDesc,filePath];
+        const values = [title, publishedBy,reportYear,shortDesc,filePath,id];
         db.getConnection(function (err, connection) {
           if (err) {
             return res.status(400).json({
